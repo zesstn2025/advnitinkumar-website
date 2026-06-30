@@ -84,7 +84,7 @@ export default async function ArticlePage({ params }: Props) {
   const related = await getRelated(article.category_id, article.slug);
   const contentHtml = await marked.parse(article.content || "");
 
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://advnitinkumar.in";
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://adnitinkumar.in";
 
   const jsonLd = {
     "@context": "https://schema.org",

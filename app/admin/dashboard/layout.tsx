@@ -33,6 +33,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           <Link href="/admin/dashboard/settings" className="flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm text-[#EDE0C4]/80 hover:bg-[#C8A878]/10 hover:text-[#C8A878] transition">
             ⚙️ SEO Settings
           </Link>
+          <Link href="/admin/dashboard/account" className="flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm text-[#EDE0C4]/80 hover:bg-[#C8A878]/10 hover:text-[#C8A878] transition">
+            🔑 Account / Password
+          </Link>
         </nav>
         <div className="p-4 border-t border-[#C8A878]/15 space-y-2">
           <Link href="/" target="_blank" className="block text-center text-xs px-4 py-2.5 rounded-lg border border-[#C8A878]/25 text-[#C8A878] hover:bg-[#C8A878]/10 transition">
