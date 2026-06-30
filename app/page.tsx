@@ -1,4 +1,4 @@
-import { createClient } from "@/lib/supabase/server";
+import { createStaticClient } from "@/lib/supabase/static";
 import homeMarkup1 from "@/lib/homeMarkup1";
 import homeMarkup2 from "@/lib/homeMarkup2";
 import homeScript from "@/lib/homeScript";
@@ -7,7 +7,7 @@ import Link from "next/link";
 export const revalidate = 3600; // refresh latest articles every hour
 
 async function getLatestArticles() {
-  const supabase = await createClient();
+  const supabase = createStaticClient();
   const { data } = await supabase
     .from("articles")
     .select("title, slug, excerpt, featured_image, published_at, read_time")

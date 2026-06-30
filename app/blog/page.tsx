@@ -1,4 +1,4 @@
-import { createClient } from "@/lib/supabase/server";
+import { createStaticClient } from "@/lib/supabase/static";
 import SiteNav from "@/components/SiteNav";
 import SiteFooter from "@/components/SiteFooter";
 import Link from "next/link";
@@ -14,7 +14,7 @@ export const metadata: Metadata = {
 };
 
 async function getArticles() {
-  const supabase = await createClient();
+  const supabase = createStaticClient();
   const { data } = await supabase
     .from("articles")
     .select("title, slug, excerpt, featured_image, published_at, read_time, category_id, categories(name, slug)")

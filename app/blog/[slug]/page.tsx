@@ -1,4 +1,4 @@
-import { createClient } from "@/lib/supabase/server";
+import { createStaticClient } from "@/lib/supabase/static";
 import SiteNav from "@/components/SiteNav";
 import SiteFooter from "@/components/SiteFooter";
 import Link from "next/link";
@@ -11,7 +11,7 @@ export const revalidate = 1800;
 type Props = { params: { slug: string } };
 
 async function getArticle(slug: string) {
-  const supabase = await createClient();
+  const supabase = createStaticClient();
   const { data } = await supabase
     .from("articles")
     .select("*, categories(name, slug)")
@@ -22,7 +22,7 @@ async function getArticle(slug: string) {
 }
 
 async function getRelated(categoryId: string | null, excludeSlug: string) {
-  const supabase = await createClient();
+  const supabase = createStaticClient();
   let query = supabase
     .from("articles")
     .select("title, slug, excerpt, featured_image")
@@ -35,7 +35,7 @@ async function getRelated(categoryId: string | null, excludeSlug: string) {
 }
 
 export async function generateStaticParams() {
-  const supabase = await createClient();
+  const supabase = createStaticClient();
   const { data } = await supabase.from("articles").select("slug").eq("status", "published");
   return (data || []).map((a) => ({ slug: a.slug }));
 }
@@ -77,13 +77,9 @@ export default async function ArticlePage({ params }: Props) {
   const article = await getArticle(slug);
   if (!article) notFound();
 
-  // Fire-and-forget view counter increment
-  const supabase = await createClient();
-  supabase
-    .from("articles")
-    .update({ views: (article.views || 0) + 1 })
-    .eq("id", article.id)
-    .then(() => {});
+  // Fire-and-forget view counter increment (via safe RPC, RLS-compliant)
+  const supabase = createStaticClient();
+  supabase.rpc("increment_article_views", { article_slug: slug }).then(() => {});
 
   const related = await getRelated(article.category_id, article.slug);
   const contentHtml = await marked.parse(article.content || "");

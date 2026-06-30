@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Cormorant_Garamond, DM_Sans, Cinzel, Space_Mono } from "next/font/google";
 import Script from "next/script";
-import { createClient } from "@/lib/supabase/server";
+import { createStaticClient } from "@/lib/supabase/static";
 import "./globals.css";
 
 const cormorant = Cormorant_Garamond({
@@ -76,7 +76,7 @@ export default async function RootLayout({
   let gaId: string | null = null;
   let gscCode: string | null = null;
   try {
-    const supabase = await createClient();
+    const supabase = createStaticClient();
     const { data } = await supabase
       .from("site_settings")
       .select("ga_tracking_id, gsc_verification_code")
